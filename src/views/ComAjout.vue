@@ -62,12 +62,8 @@
         </div>
 
 
-
-
-
             <div>
-
-            </div>
+                       </div>
 
 
 
@@ -98,6 +94,7 @@
                 firstname: localStorage.getItem('firstname'),
                 lastname: localStorage.getItem('lastname'),
                 isAdmin: localStorage.getItem('isAdmin'),
+               
 
                 posts: [],
                 post: '',
@@ -132,19 +129,30 @@
 
         methods: {
             // Permet de créer un nouveau message
-            uploadFile() {
-                this.$refs.fileUpload.click()
-            },
-            onFileSelected(event) {
-                this.imagePost = event.target.files[0];
-                this.imagePreview = URL.createObjectURL(this.imagePost);
-            },
+            // uploadFile() {
+            //     this.$refs.fileUpload.click()
+            // },
+            // onFileSelected(event) {
+            //     this.imagePost = event.target.files[0];
+            //     this.imagePreview = URL.createObjectURL(this.imagePost);
+            // },
             createPost() {
-                const formData = new FormData();
-                formData.append("content", this.content);
-                formData.append("image", this.imagePost);
+                console.log("creation")
 
-                axios.post('http://localhost:3000/api/post', formData, {
+// axios.post('http://localhost:3000/api/users/login', {
+//                     email: this.email,
+//                     password: this.password,
+//                 })
+
+                let Artid = this.$route.query.id;
+
+                console.log(Artid);
+
+                axios.post('http://localhost:3000/api/comments',  {
+                content: this.content,
+                idArticle: Artid,
+                userId: this.userId,
+
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -162,7 +170,8 @@
 
 // Permet d'afficher tous les messages
             displayPost() {
-                axios.get('http://localhost:3000/api/comments/83', {
+                let idArticle = this.$route.query.id;
+                axios.get('http://localhost:3000/api/comments/' + idArticle, {
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -201,7 +210,7 @@
 
             // Permet d'afficher les commentaires d'un message
             displayComment(id) {
-                this.showComment = !this.showComment
+              //  this.showComment = !this.showComment
 
                 const postId = id;
 
@@ -332,6 +341,12 @@
             @media (max-width: 450px) {
                 width: 90%;
             }
+             &__image
+             {
+                 width: 60px;
+                 height: 60px
+
+        }
             &__information {
                 display: flex;
                 justify-content: space-between;

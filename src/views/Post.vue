@@ -98,7 +98,7 @@ export default {
     methods: {
 
     detail(idArticle) {
-       console.log("xxxxxxxxxxxxxxxxxx", idArticle)
+      // console.log("xxxxxxxxxxxxxxxxxx", idArticle)
 
         this.$router.push( { path: 'Postdetail', query: { id: idArticle }});
     },

@@ -4,16 +4,36 @@
 
 
 
-<select v-model="selected">
-  <option v-for="post in posts" v-bind:value="post.idThemes" :key="post.idThemes">
-    {{ post.Nom_theme }}
-    </option>
-</select>
-<br>
-<span>Sélectionné : {{ selected }} </span>
+<div id="themes" >
 
+  <label for="pet-select">Choisir un theme:</label>
+
+<select @change="getvalue($event)" >
+    <option v-bind:value="post.idThemes" v-for="post in posts" v-bind:key='post.idThemes'> {{ post.Nom_theme }}</option>
+
+
+
+</select>
+
+</div>
+
+
+
+
+<div id="themes">
+ <h2>Items:</h2>
+  <ul>
+  <li v-for="(post, index) in posts" v-bind:key='index'>
+     {{ post.idThemes }}
+
+      {{ post.Nom_theme }} <button  @click="themeselection(post.idThemes)">choisir</button>
+     </li>
+   </ul>
+ </div>
 
 </template>
+
+
 <script>
  import axios from 'axios'
  import Navbar from '../components/Navbar.vue'
@@ -49,6 +69,19 @@ components: {
             });
         },
  methods:  {
+
+getvalue(event) {
+    console.log(event.target.value)
+
+      },
+
+
+      themeselection(toto)
+
+      {
+    console.log(toto)
+
+      },
 
 
             // Permet d'afficher tous les messages

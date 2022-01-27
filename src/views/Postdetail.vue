@@ -35,12 +35,7 @@
                     {{ post.content}}
                     </div>
 
-
                     <div class="displayPost__item__publication">
-
-
-
-
 
                 </div>
 
@@ -134,21 +129,26 @@
             // Permet de créer un nouveau message
 
         ComAjout() {
+        let idArticle = this.$route.query.id;
 
-        this.$router.push('ComAjout');
+        this.$router.push( { path: 'ComAjout' , query: { id: idArticle }});
     },
 
-            uploadFile() {
-                this.$refs.fileUpload.click()
-            },
-            onFileSelected(event) {
-                this.imagePost = event.target.files[0];
-                this.imagePreview = URL.createObjectURL(this.imagePost);
-            },
+            // uploadFile() {
+            //     this.$refs.fileUpload.click()
+            // },
+
+            // onFileSelected(event) {
+            //     this.imagePost = event.target.files[0];
+            //     this.imagePreview = URL.createObjectURL(this.imagePost);
+            // },
             createPost() {
                 const formData = new FormData();
                 formData.append("content", this.content);
                 formData.append("image", this.imagePost);
+
+
+
 
                 axios.post('http://localhost:3000/api/post', formData, {
                     headers: {
@@ -264,25 +264,25 @@
             },
 
             // Permet d'afficher les commentaires d'un message
-            displayComment(id) {
-                this.showComment = !this.showComment
+            // displayComment(id) {
+            //     this.showComment = !this.showComment
 
-                const postId = id;
+            //     const postId = id;
 
-                axios.get('http://localhost:3000/api/comment/' + postId, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(response => {
-                    this.comments = response.data;
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
+            //     axios.get('http://localhost:3000/api/comment/' + postId, {
+            //         headers: {
+            //             'Content-Type' : 'application/json',
+            //             'Authorization': 'Bearer ' + localStorage.getItem('token')
+            //         }
+            //     })
+            //     .then(response => {
+            //         this.comments = response.data;
+            //     })
+            //     .catch(error => {
+            //         const msgerror = error.response.data
+            //         this.notyf.error(msgerror.error)
+            //     })
+            // },
 
             // Permet de supprimer un commentaire
             deleteComment(id) {
@@ -408,6 +408,12 @@
             @media (max-width: 450px) {
                 width: 90%;
             }
+             &__image
+             {
+                 width: 60px;
+                 height: 60px
+
+        }
             &__information {
                 display: flex;
                 justify-content: space-between;
@@ -502,13 +508,7 @@
                         }
                     }
                 }
-                &__image {
-                    max-width: 1250px;
-                    width: 100%;
-                    height: 274px;
-                    margin: 1rem auto;
-                    object-fit: cover;
-                }
+
             }
             &__option {
                 display: flex;
