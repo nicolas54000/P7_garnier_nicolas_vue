@@ -7,6 +7,9 @@
 
 
        <div class="displayPost" v-for="(post, index) in posts" :key="post.postId">
+         {{ post.userId }}
+
+
             <div class="displayPost__item">
                 <div>
                     <!--on affiche le titre pour la 1er post -->
@@ -16,6 +19,7 @@
                     <div class="displayPost__item__information">
                       <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
                             {{ post.Nom_theme }}
+
 
                     </div>
                     <button @click="ComAjout" type="button" class="">
@@ -43,20 +47,27 @@
 
                 <!--  like un message-->
 
-                    <Likes v-bind:post="post"/>
+                   <Likes v-bind:post="post"/>
 
                     <div>
-                        <i @click="displayComment(post.id)" v-on:click="diplayCreateComment(post.id)" class="displayPost__item__option__button far fa-comment-dots" aria-label="Commenter le message"></i>
-
+                        <i @click="displayComment(post.id)"
+                         v-on:click="diplayCreateComment(post.id)"
+                          class="far fa-comment-dots"
+                           aria-label="Commenter le message"></i>
 
                     </div>
 
                     <!--  modifier le poste  si admin et si cest l auteur du poste-->
 
-                    <i v-if="userId == post.UserId || isAdmin == 'true'"
-                     @click="displayModifyPost(post.id)" class="displayPost__item__option__button far fa-edit" aria-label="Modifier le message"></i>
+                    <i v-if="userId == post.userId || isAdmin == 'true'"
+                     @click="displayModifyPost(post.commentId)"
+                     class="far fa-edit" aria-label="Modifier le message"></i>
 
-                    <i v-if="userId == post.UserId || isAdmin == 'true'" v-on:click="deletePost(post.id)" class="displayPost__item__option__button far fa-trash-alt" aria-label="Supprimer le message"></i>
+                    <!--  supprimer le poste  si admin et si cest l auteur du poste-->
+
+                    <i v-if="userId ==  post.userId || isAdmin == 'true'"
+                     v-on:click="deletePost(post.commentId)" class="far fa-trash-alt"
+                      aria-label="Supprimer le message"></i>
                 </div>
             </div>
 
@@ -95,6 +106,7 @@
                 lastname: localStorage.getItem('lastname'),
                 isAdmin: localStorage.getItem('isAdmin'),
 
+
                 posts: [],
                 post: '',
                 imagePost: '',
@@ -109,7 +121,6 @@
                 showComment: false,
                 showCreateComment: false,
                 showInputModify: false,
-
 
             }
         },
@@ -134,37 +145,7 @@
         this.$router.push( { path: 'ComAjout' , query: { id: idArticle }});
     },
 
-            // uploadFile() {
-            //     this.$refs.fileUpload.click()
-            // },
 
-            // onFileSelected(event) {
-            //     this.imagePost = event.target.files[0];
-            //     this.imagePreview = URL.createObjectURL(this.imagePost);
-            // },
-            createPost() {
-                const formData = new FormData();
-                formData.append("content", this.content);
-                formData.append("image", this.imagePost);
-
-
-
-
-                axios.post('http://localhost:3000/api/post', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(() => {
-                    window.location.reload()
-                })
-                .catch(error => {
-                    const msgerror = error.response.data;
-                    this.notyf.error(msgerror.error)
-
-                })
-            },
 
 
             // Permet d'afficher tous les messages
@@ -224,7 +205,7 @@
             deletePost(id) {
                 const postId = id;
 
-                axios.delete('http://localhost:3000/api/post/' + postId, {
+                axios.delete('http://localhost:3000/api/comments/' + postId, {
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -240,49 +221,6 @@
             },
 
 
-
-
-
-            // Permet de créer un nouveau commentaire
-            createComment(id) {
-                const postId = id;
-
-                axios.post('http://localhost:3000/api/comment/' + postId, {
-                    content: this.contentComment,
-                },{
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
-                })
-                .then(() => {
-                    window.location.reload()
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
-
-            // Permet d'afficher les commentaires d'un message
-            // displayComment(id) {
-            //     this.showComment = !this.showComment
-
-            //     const postId = id;
-
-            //     axios.get('http://localhost:3000/api/comment/' + postId, {
-            //         headers: {
-            //             'Content-Type' : 'application/json',
-            //             'Authorization': 'Bearer ' + localStorage.getItem('token')
-            //         }
-            //     })
-            //     .then(response => {
-            //         this.comments = response.data;
-            //     })
-            //     .catch(error => {
-            //         const msgerror = error.response.data
-            //         this.notyf.error(msgerror.error)
-            //     })
-            // },
 
             // Permet de supprimer un commentaire
             deleteComment(id) {

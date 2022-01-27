@@ -66,6 +66,9 @@
                     localStorage.setItem('fk_roles', response.data.fk_roles);
                     localStorage.setItem('email', response.data.email);
                     localStorage.setItem('isActive', response.data.isActive);
+                    localStorage.setItem('isAdmin', response.data.isAdmin);
+
+
 
                     this.$router.push('post');
                 })
