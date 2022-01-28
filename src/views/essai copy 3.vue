@@ -4,32 +4,32 @@
 
 
 
-<!--div id="themes" >
+<div id="themes" >
 
-   <label for="pet-select">Choisir un theme:</label>
+  <label for="pet-select">Choisir un theme:</label>
 
- <select @change="getvalue($event)" >
-     <option v-bind:value="post.idThemes" v-for="post in posts" v-bind:key='post.idThemes'> {{ post.Nom_theme }}</option>
-
- </select>
-
- </div-->
+<select @change="getvalue($event)" >
+    <option v-bind:value="post.idThemes" v-for="post in posts" v-bind:key='post.idThemes'> {{ post.Nom_theme }}</option>
 
 
-<table class="toto">
-<thead>
-        <tr>
-            <th colspan="2">filtrer par theme</th>
-        </tr>
-    </thead>
 
-<tbody>
-        <tr v-for="(post, index) in posts" v-bind:key='index'>
-            <td> {{ post.Nom_theme }}</td>
-            <td > <img class="foto" @click="themeselection(post.idThemes)" :src="require(`@/assets/themes/${post.Image}`)"></td>
-        </tr>
- </tbody>
-</table>
+</select>
+
+</div>
+
+
+
+
+<div id="themes">
+ <h2>Items:</h2>
+  <ul>
+  <li v-for="(post, index) in posts" v-bind:key='index'>
+     {{ post.idThemes }}
+
+      {{ post.Nom_theme }} <button  @click="themeselection(post.idThemes)">choisir</button>
+     </li>
+   </ul>
+ </div>
 
 </template>
 
@@ -75,12 +75,15 @@ getvalue(event) {
 
       },
 
+
       themeselection(toto)
 
       {
     console.log(toto)
 
       },
+
+
             // Permet d'afficher tous les messages
 
             displayPost() {
@@ -104,33 +107,4 @@ getvalue(event) {
 
 </script>
 
-<style scoped lang="scss">
-@import "../variables_SCSS/couleurs.scss";
 
-td
-{
-width:150px;
-height:50px;
-text-align: start;
-}
-
-.toto
-{
-margin: 100px 15px 150px 50px;
-border: solid;
-
-}
-
-
-.foto
-{
-width:40px;
-height:35px;
-}
-.foto:hover {
-
-	transform: scale(1.3);
-}
-
-
-</style>

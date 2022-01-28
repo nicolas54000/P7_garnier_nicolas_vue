@@ -1,26 +1,7 @@
 <template>
-
+    <div id="post">
         <Navbar />
 
-<div id="post">
-
-<div>
-        <table class="toto">
-        <thead>
-            <tr>
-                <th colspan="2">filtrer par theme</th>
-            </tr>
-        </thead>
-
-    <tbody>
-        <tr v-for="(theme, index) in themes" v-bind:key='index'>
-            <td> {{ theme.Nom_theme }}</td>
-            <td > <img class="foto" @click="themeselection(theme.idThemes)" :src="require(`@/assets/themes/${theme.Image}`)"></td>
-        </tr>
-    </tbody>
-    </table>
-</div>
-<div>
         <h1>les derniers articles</h1>
 
         <div class="displayPost" v-for="post in posts" :key="post.postId"  ref="post.idArticle">
@@ -31,6 +12,8 @@
                 <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
                  {{ post.Nom_theme }}
                 </div>
+
+
 
                 <div class="displayPost__item__information">
                     <div class="displayPost__item__information__user">
@@ -55,7 +38,6 @@
         </div>
 
     </div>
-     </div>
 
     </div>
 </template>
@@ -83,12 +65,8 @@ export default {
             lastname: localStorage.getItem("lastname"),
             isAdmin: localStorage.getItem("isAdmin"),
 
-
-
             posts: [],
-            themes: [],
             post: "",
-            theme:"",
             imagePost: "",
             imagePreview: null,
             content: "",
@@ -105,8 +83,6 @@ export default {
     },
     created() {
         this.displayPost();
-        this.displaythemes();
-
         this.notyf = new Notyf({
             duration: 2000,
             position: {
@@ -121,51 +97,20 @@ export default {
 
     methods: {
 
-
-
-
     detail(idArticle) {
       // console.log("xxxxxxxxxxxxxxxxxx", idArticle)
 
         this.$router.push( { path: 'Postdetail', query: { id: idArticle }});
     },
 
-
-        displaythemes() {
-                  axios.get('http://localhost:3000/api/themes', {
-
-                })
-
-                .then(response => {
-                    this.themes = response.data;
-
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
- // Permet d'afficher les articles par theme
-        themeselection(themeId) {
-                  axios.get('http://localhost:3000/api/articles/theme/' + themeId )
-                .then(response => {
-
-                    this.posts = response.data;
-
-
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
         // Permet d'afficher tous les messages
         displayPost() {
-            axios.get("http://localhost:3000/api/articles/all/5", {
+            axios
+                .get("http://localhost:3000/api/articles/all/5", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization:
-                        localStorage.getItem("token"),
+                            "Bearer " + localStorage.getItem("token"),
                     },
                 })
                 .then((response) => {
@@ -184,46 +129,10 @@ export default {
             }
         },
     },
-
 };
-
 </script>
 
 <style scoped lang="scss">
-
-#post
-{
-display: flex,
-
-}
-
-
-td
-{
-width:100px;
-height:50px;
-text-align: start;
-}
-
-.toto
-{
-margin: 100px 15px 15px 50px;
-border: 2px solid #ff6363;
-border-radius: 25px;
-
-}
-
-
-.foto
-{
-width:40px;
-height:35px;
-}
-.foto:hover {
-
-	transform: scale(1.3);
-}
-
 .invisible {
     display: none;
 }
@@ -239,7 +148,7 @@ height:35px;
         margin: auto;
         margin-top: 2rem;
         padding: 1rem;
-        width: 700px;
+        width: 50%;
         @media (max-width: 950px) {
             width: 60%;
         }

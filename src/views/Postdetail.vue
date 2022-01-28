@@ -212,7 +212,7 @@
                     }
                 })
                 .then(() => {
-                    this.displayPost();cd
+                    this.displayPost();
                 })
                 .catch(error => {
                     const msgerror = error.response.data
