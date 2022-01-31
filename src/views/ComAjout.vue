@@ -63,7 +63,7 @@
 
 
             <div>
-                       </div>
+        </div>
 
 
 
@@ -74,27 +74,25 @@
 
 <script>
     import axios from 'axios'
-     import moment from 'moment'
+    import moment from 'moment'
     import { Notyf } from 'notyf'
     import 'notyf/notyf.min.css'
 
     import Navbar from '@/components/Navbar.vue'
 
-
-
     export default {
-        name: 'Post',
+        name: 'ComAjout',
         components: {
             Navbar,
-
         },
+
         data() {
             return {
                 userId: localStorage.getItem('userId'),
                 firstname: localStorage.getItem('firstname'),
                 lastname: localStorage.getItem('lastname'),
                 isAdmin: localStorage.getItem('isAdmin'),
-               
+
 
                 posts: [],
                 post: '',
@@ -105,12 +103,10 @@
                 comments: [],
                 contentComment: '',
 
-
                 revele: false,
                 showComment: false,
                 showCreateComment: false,
                 showInputModify: false,
-
 
             }
         },
@@ -128,34 +124,23 @@
 
 
         methods: {
-            // Permet de créer un nouveau message
-            // uploadFile() {
-            //     this.$refs.fileUpload.click()
-            // },
-            // onFileSelected(event) {
-            //     this.imagePost = event.target.files[0];
-            //     this.imagePreview = URL.createObjectURL(this.imagePost);
-            // },
-            createPost() {
-                console.log("creation")
 
-// axios.post('http://localhost:3000/api/users/login', {
-//                     email: this.email,
-//                     password: this.password,
-//                 })
+            createPost() {
+               //console.log("creation")
 
                 let Artid = this.$route.query.id;
 
-                console.log(Artid);
 
-                axios.post('http://localhost:3000/api/comments',  {
+
+                axios.post('http://localhost:3000/api/comments/',  {
                 content: this.content,
                 idArticle: Artid,
                 userId: this.userId,
 
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        'Authorization':
+                        localStorage.getItem('token')
                     }
                 })
                 .then(() => {

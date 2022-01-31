@@ -2,77 +2,35 @@
     <div id="post">
         <Navbar/>
 
-        <h1 class="invisible">Fil d'actualité</h1>
+        <div class="newPost">
+            <form @submit.prevent="ModifPost" aria-label="Nouveau message">
+                <div class="newPost__content">
 
-       <div class="displayPost" v-for="(post, index) in posts" :key="post.postId">
-        <!-- {{ post.userId }} -->
-
-            <div class="displayPost__item">
-                <div>
-                    <!--on affiche le titre pour la 1er post -->
-
-                <div v-if= "index == 0">
-
-                    <div class="displayPost__item__information">
-                      <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
-                            {{ post.Nom_theme }}
-                    </div>
-                    <button @click="ComAjout" type="button" class="">
-                    <i class="far fa-images fa"></i> ajouter un poste </button>
-                    <BR/>
-                     <BR/>
-                  </div>
-
-                    <div class="displayPost__item__information">
-                                    <h2 class="displayPost__item__information__user__name">
-                                        Publié le {{ dateFormat(post.dateOfModification) }}
-                                        par
-                                        {{ post.firstname }} {{ post.lastname }}
-                                    </h2>
-                    </div>
-                    {{ post.content}}
-                    </div>
-
-                    <div class="displayPost__item__publication">
+                <div class="home__display__form__input">
+                    <label for="content" class="home__display__form__input__label">Modifier mon commantaire</label>
+                    <textarea v-model="commentaires"
+                     class="newPost__content__text"
+                     id="commentaires"
+                     name="commentaires"/>
+                </div>
 
                 </div>
 
-                <div class="displayPost__item__option">
-
-                <!--  like un message-->
-
-                   <Likes v-bind:post="post"/>
-
-                    <!--div>
-                        <i @click="displayComment(post.id)"
-                         v-on:click="diplayCreateComment(post.id)"
-                          class="far fa-comment-dots"
-                           aria-label="Commenter le message"></i>
-
-                    </div-->
-
-                    <!--  modifier le poste  si admin et si cest l auteur du poste-->
-
-                    <i v-if="userId == post.userId || isAdmin == 'true'"
-                     @click="ModifyPost(post.commentId)"
-                     class="far fa-edit" aria-label="Modifier le message"></i>
-
-                    <!--  supprimer le poste  si admin et si cest l auteur du poste-->
-
-                    <i v-if="userId ==  post.userId || isAdmin == 'true'"
-                     v-on:click="deletePost(post.commentId)" class="far fa-trash-alt"
-                      aria-label="Supprimer le message"></i>
+                <div class="newPost__option">
+                    <button type="submit" class="newPost__option__button" aria-label="Publier le message">Modifier <i class="far fa-paper-plane"></i></button>
                 </div>
-            </div>
-
-            <div>
-
-            </div>
+            </form>
         </div>
 
-        <router-view/>
+
+            <div>
+         </div>
+
+
+
     </div>
 </template>
+
 
 <script>
     import axios from 'axios'
@@ -81,15 +39,13 @@
     import 'notyf/notyf.min.css'
 
     import Navbar from '@/components/Navbar.vue'
-    // import ProfileImage from '../components/ProfileImage.vue'
-    import Likes from '../components/Likes.vue'
 
     export default {
-        name: 'Postdetail',
+        name: 'ComModif',
         components: {
             Navbar,
-            Likes
-        },
+       },
+
         data() {
             return {
                 userId: localStorage.getItem('userId'),
@@ -102,23 +58,23 @@
                 post: '',
                 imagePost: '',
                 imagePreview: null,
-                content: '',
+
                 contentmodifyPost: '',
                 comments: [],
                 contentComment: '',
-                like: false,
-                postLikes: [],
+
+
                 revele: false,
                 showComment: false,
                 showCreateComment: false,
                 showInputModify: false,
+                commentaires: '',
 
             }
         },
-        created()
+        created() {
+           this.displayComment();
 
-        {
-            this.displayPost();
             this.notyf = new Notyf({
                 duration: 2000,
                 position: {
@@ -127,21 +83,17 @@
                 }
             });
         },
+
+
         methods: {
-            // Permet de créer un nouveau message
 
-        ComAjout() {
-        let idArticle = this.$route.query.id;
 
-        this.$router.push( { path: 'ComAjout' , query: { id: idArticle }});
-    },
+            // Permet d'afficher les commentaires d'un message
+            displayComment() {
 
-            // Permet d'afficher tous les messages
-            displayPost() {
+                 let postId = this.$route.query.id;
 
-            let idArticle = this.$route.query.id;
-
-                axios.get('http://localhost:3000/api/comments/' + idArticle, {
+                axios.get('http://localhost:3000/api/comments/un/' + postId, {
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization':
@@ -150,7 +102,10 @@
                 })
                 .then(response => {
                     this.posts = response.data;
+                    this.commentaires = this.posts[0].content;
 
+                    //console.log(this.posts)
+                    // console.log("vvvvvvvvvvv", this.commentaires)
                 })
                 .catch(error => {
                     const msgerror = error.response.data
@@ -158,47 +113,43 @@
                 })
             },
 
-            // Permet d'afficher la date de publication au bon format
+            ModifPost() {
+               console.log("modification")
+
+                 let postId = this.$route.query.id;
+
+                axios.put('http://localhost:3000/api/comments/' + postId,  {
+                content: this.commentaires,
+
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization':
+                        localStorage.getItem('token')
+                    }
+                })
+                .then(() => {
+                    window.location.reload()
+                })
+                .catch(error => {
+                    const msgerror = error.response.data;
+                    this.notyf.error(msgerror.error)
+
+                })
+            },
+ // Permet d'afficher la date de publication au bon format
             dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY')
                 }
             },
 
-            // Permet de modifier un message
-            ModifyPost(idArticle) {
-                this.$router.push( { path: 'ComModif' , query: { id: idArticle }});
-
-            },
-
-            // Permet de supprimer un message
-            deletePost(id) {
-                const postId = id;
-
-                axios.delete('http://localhost:3000/api/comments/' + postId, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization':
-                        localStorage.getItem('token')
-                    }
-                })
-                .then(() => {
-                    this.displayPost();
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
         }
     }
 </script>
 
 
 <style scoped lang="scss">
-    .invisible {
-        display: none;
-    }
+
     .newPost {
         background: #ffb1b1;
         border-radius: 25px;
@@ -396,7 +347,13 @@
                         }
                     }
                 }
-
+                &__image {
+                    max-width: 1250px;
+                    width: 100%;
+                    height: 274px;
+                    margin: 1rem auto;
+                    object-fit: cover;
+                }
             }
             &__option {
                 display: flex;

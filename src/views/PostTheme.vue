@@ -2,7 +2,7 @@
 
         <Navbar />
 
-<div id="post">
+<div id="post" >
 
 <div>
         <table class="toto">
@@ -13,7 +13,7 @@
         </thead>
 
     <tbody>
-        <tr v-for="theme in themes" v-bind:key="theme.idThemes">
+        <tr v-for="(theme, index) in themes" v-bind:key='index'>
             <td> {{ theme.Nom_theme }}</td>
             <td > <img class="foto" @click="themeselection(theme.idThemes)" :src="require(`@/assets/themes/${theme.Image}`)"></td>
         </tr>
@@ -71,7 +71,7 @@ import Navbar from "@/components/Navbar.vue";
 
 
 export default {
-    name: "Post",
+    name: "PostTheme",
     components: {
         Navbar,
 
@@ -82,6 +82,8 @@ export default {
             firstname: localStorage.getItem("firstname"),
             lastname: localStorage.getItem("lastname"),
             isAdmin: localStorage.getItem("isAdmin"),
+
+
 
             posts: [],
             themes: [],
@@ -114,15 +116,24 @@ export default {
         });
     },
 
+
+
+
     methods: {
 
+
+
+
     detail(idArticle) {
+      // console.log("xxxxxxxxxxxxxxxxxx", idArticle)
 
         this.$router.push( { path: 'Postdetail', query: { id: idArticle }});
     },
 
+
         displaythemes() {
                   axios.get('http://localhost:3000/api/themes', {
+
                 })
 
                 .then(response => {
@@ -135,28 +146,10 @@ export default {
                 })
             },
  // Permet d'afficher les articles par theme
-        themeselection(themeId) {
-                 //  this.$router.push( { path: 'PostTheme', query: { id: themeId  }});
 
-        axios.get('http://localhost:3000/api/articles/theme/' + themeId, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization:
-                        localStorage.getItem("token"),
-                    },
-                })
-                .then((response) => {
-                    this.posts = response.data;
-                })
-                .catch((error) => {
-                    const msgerror = error.response.data;
-                    this.notyf.error(msgerror.error);
-                });
-            },
-            
         // Permet d'afficher tous les messages
         displayPost() {
-            axios.get("http://localhost:3000/api/articles/all/5", {
+            axios.get("http://localhost:3000/api/articles/theme/2", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization:
@@ -165,7 +158,6 @@ export default {
                 })
                 .then((response) => {
                     this.posts = response.data;
-                    //window.location.reload()
                 })
                 .catch((error) => {
                     const msgerror = error.response.data;

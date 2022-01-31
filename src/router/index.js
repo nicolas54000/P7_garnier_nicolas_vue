@@ -31,6 +31,17 @@ const routes = [
   },
 
   {
+    path: '/postTheme',
+    name: 'PostTheme',
+    component: () => import('../views/PostTheme.vue'),
+    meta: {
+      middleware: auth
+    }
+  },
+
+
+
+  {
     path: '/postdetail',
     name: 'Postdetail',
     component: () => import('../views/Postdetail.vue'),
@@ -47,7 +58,14 @@ const routes = [
     }
   },
 
-
+  {
+    path: '/ComModif',
+    name: 'ComModif',
+    component: () => import('../views/ComModif.vue'),
+    meta: {
+      middleware: auth
+    }
+  },
 
   {
     path: '/profile',
