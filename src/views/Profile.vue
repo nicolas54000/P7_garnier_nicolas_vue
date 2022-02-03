@@ -72,7 +72,8 @@
 
 				axios.get('http://localhost:3000/api/users/' + userId, {
 					headers: {
-						Authorization: 'Bearer ' + localStorage.getItem('token')
+						Authorization:
+						localStorage.getItem('token')
 					}
 				})
 				.then(response => {
@@ -95,7 +96,8 @@
 							firstname: this.wfirstname,
 
 					headers: {
-						'Authorization': 'Bearer ' + localStorage.getItem('token'),
+						'Authorization':
+						localStorage.getItem('token'),
 						'Content-Type': 'multipart/form-data'
 					}
 				})
@@ -135,7 +137,7 @@
 		@media (max-width: 500px) {
 			min-width: 80%;
 		}
-		
+
 		&__info {
 			display: flex;
 			flex-direction: column;

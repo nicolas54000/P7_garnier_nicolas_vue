@@ -25,7 +25,7 @@
 
                     <div class="displayPost__item__information">
                                     <h2 class="displayPost__item__information__user__name">
-                                        Publié le {{ dateFormat(post.dateOfModification) }}
+                                        Publié le {{ dateFormat(post.dateOfCreation) }}
                                         par
                                         {{ post.firstname }} {{ post.lastname }}
                                     </h2>
@@ -53,13 +53,13 @@
 
                     <!--  modifier le poste  si admin et si cest l auteur du poste-->
 
-                    <i v-if="userId == post.userId || isAdmin == 'true'"
+                    <i v-if="userId == post.userId || isAdminw == 1 "
                      @click="ModifyPost(post.commentId)"
                      class="far fa-edit" aria-label="Modifier le message"></i>
 
                     <!--  supprimer le poste  si admin et si cest l auteur du poste-->
 
-                    <i v-if="userId ==  post.userId || isAdmin == 'true'"
+                    <i v-if="userId ==  post.userId || isAdminw == 1 "
                      v-on:click="deletePost(post.commentId)" class="far fa-trash-alt"
                       aria-label="Supprimer le message"></i>
                 </div>
@@ -95,7 +95,7 @@
                 userId: localStorage.getItem('userId'),
                 firstname: localStorage.getItem('firstname'),
                 lastname: localStorage.getItem('lastname'),
-                isAdmin: localStorage.getItem('isAdmin'),
+                isAdminw: localStorage.getItem('isAdmin'),
 
 
                 posts: [],

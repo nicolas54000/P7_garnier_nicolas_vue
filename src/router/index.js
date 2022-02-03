@@ -16,9 +16,9 @@ const routes = [
   },
 
   {
-    path: '/essai',
-    name: 'essai',
-    component: () => import('../views/essai.vue')
+    path: '/PostAjout',
+    name: 'PostAjout',
+    component: () => import('../views/PostAjout.vue')
   },
 
   {

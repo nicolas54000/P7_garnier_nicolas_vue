@@ -2,12 +2,45 @@
     <div id="post">
         <Navbar/>
 
+
+       <div v-for="(post, index) in posts" :key="post.postId">
+
+            <div v-if= "index == 0">
+
+
+            <div class="displayPost__item">
+                <div>
+                    <!--on affiche le titre pour la 1er post -->
+
+                    <div class="displayPost__item__information">
+                      <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
+                            {{ post.Nom_theme }}
+
+                    </div>
+
+                    <BR/>
+                     <BR/>
+
+                    <div class="displayPost__item__information">
+                                    <h2 class="displayPost__item__information__user__name">
+                                        Publié le {{ dateFormat(post.dateOfModification) }}
+                                        par
+                                        {{ post.firstname }} {{ post.lastname }}
+                                    </h2>
+                    </div>
+                    {{ post.content}}
+
+                    </div>
+                </div>
+            </div>
+         </div>
+
         <div class="newPost">
             <form @submit.prevent="ModifPost" aria-label="Nouveau message">
                 <div class="newPost__content">
 
                 <div class="home__display__form__input">
-                    <label for="content" class="home__display__form__input__label">Modifier mon commantaire</label>
+                    <label for="content" class="home__display__form__input__label">Modifier mon commentaire</label>
                     <textarea v-model="commentaires"
                      class="newPost__content__text"
                      id="commentaires"
@@ -73,7 +106,8 @@
             }
         },
         created() {
-           this.displayComment();
+            this.displayPost();
+            this.displayComment();
 
             this.notyf = new Notyf({
                 duration: 2000,
@@ -87,7 +121,25 @@
 
         methods: {
 
+       // Permet d'afficher le titre
+            displayPost() {
+                let idArticle = this.$route.query.id;
+                axios.get('http://localhost:3000/api/comments/' + idArticle, {
+                    headers: {
+                        'Content-Type' : 'application/json',
+                        'Authorization':
+                        localStorage.getItem('token')
+                    }
+                })
+                .then(response => {
+                    this.posts = response.data;
 
+                })
+                .catch(error => {
+                    const msgerror = error.response.data
+                    this.notyf.error(msgerror.error)
+                })
+            },
             // Permet d'afficher les commentaires d'un message
             displayComment() {
 

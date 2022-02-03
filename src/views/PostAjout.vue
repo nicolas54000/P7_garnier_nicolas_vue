@@ -1,47 +1,20 @@
 <template>
-    <div id="post">
+
         <Navbar/>
 
-       
+<div id="themes" >
 
-       <div v-for="(post, index) in posts" :key="post.postId">
+     <div class="newPost">
 
-            <div v-if= "index == 0">
+    <label >Choisir un theme:</label>
 
-
-            <div class="displayPost__item">
-                <div>
-                    <!--on affiche le titre pour la 1er post -->
-
-                    <div class="displayPost__item__information">
-                      <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
-                            {{ post.Nom_theme }}
-
-                    </div>
-
-                    <BR/>
-                     <BR/>
-
-                    <div class="displayPost__item__information">
-                                    <h2 class="displayPost__item__information__user__name">
-                                        Publié le {{ dateFormat(post.dateOfModification) }}
-                                        par
-                                        {{ post.firstname }} {{ post.lastname }}
-                                    </h2>
-                    </div>
-                    {{ post.content}}
-
-                    </div>
-                </div>
-            </div>
-         </div>
-
-        <div class="newPost">
-
+        <select>
+            <option v-bind:value="post.idThemes" v-for="post in themes" v-bind:key='post.idThemes'> {{ post.Nom_theme }}</option>
+        </select>
 
             <form @submit.prevent="createPost" aria-label="Nouveau message">
                 <div class="newPost__content">
-                    <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Quoi de neuf ?" aria-label="Rédiger un nouveau message"/>
+                    <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Saisie du poste?" aria-label="Rédiger un nouveau message"/>
 
 
                 </div>
@@ -57,8 +30,13 @@
                 </div>
             </form>
         </div>
+
+
             <div>
         </div>
+
+
+
     </div>
 </template>
 
@@ -73,7 +51,7 @@
     import Navbar from '@/components/Navbar.vue'
 
     export default {
-        name: 'ComAjout',
+        name: 'PostAjout',
         components: {
             Navbar,
         },
@@ -87,6 +65,7 @@
 
 
                 posts: [],
+                themes: [],
                 post: '',
                 imagePost: '',
                 imagePreview: null,
@@ -103,7 +82,8 @@
             }
         },
         created() {
-           this.displayPost();
+           this.displaythemes();
+
             this.notyf = new Notyf({
                 duration: 2000,
                 position: {
@@ -144,18 +124,13 @@
 
                 })
             },
-
-// Permet d'afficher tous les messages
-            displayPost() {
-                let idArticle = this.$route.query.id;
-                axios.get('http://localhost:3000/api/comments/' + idArticle, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
+            displaythemes() {
+                  axios.get('http://localhost:3000/api/themes/', {
                 })
+
                 .then(response => {
-                    this.posts = response.data;
+                    this.themes = response.data;
+                    console.log(this.themes)
 
                 })
                 .catch(error => {
@@ -166,7 +141,7 @@
 
 
             // Permet de créer un nouveau commentaire
-            createComment(id) {
+            createCom(id) {
                 const postId = id;
 
                 axios.post('http://localhost:3000/api/comment/' + postId, {
@@ -186,27 +161,7 @@
                 })
             },
 
-            // Permet d'afficher les commentaires d'un message
-            displayComment(id) {
-              //  this.showComment = !this.showComment
 
-                const postId = id;
-
-                axios.get('http://localhost:3000/api/comment/' + postId, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization':
-                        localStorage.getItem('token')
-                    }
-                })
-                .then(response => {
-                    this.comments = response.data;
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
  // Permet d'afficher la date de publication au bon format
             dateFormat(date){
                 if (date) {

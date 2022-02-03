@@ -4,7 +4,7 @@
 
 
 
-<!--div id="themes" >
+<div id="themes" >
 
    <label for="pet-select">Choisir un theme:</label>
 
@@ -13,7 +13,7 @@
 
  </select>
 
- </div-->
+ </div>
 
 
 <table class="toto">
@@ -84,7 +84,7 @@ getvalue(event) {
             // Permet d'afficher tous les messages
 
             displayPost() {
-                  axios.get('http://localhost:3000/api/themes', {
+                  axios.get('http://localhost:3000/api/themes/', {
 
                 })
 
