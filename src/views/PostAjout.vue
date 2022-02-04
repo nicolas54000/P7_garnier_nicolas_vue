@@ -8,8 +8,8 @@
 
     <label >Choisir un theme:</label>
 
-        <select>
-            <option v-bind:value="post.idThemes" v-for="post in themes" v-bind:key='post.idThemes'> {{ post.Nom_theme }}</option>
+        <select @change="getvalue($event)" >
+            <option  v-bind:value="theme.idThemes" v-for="theme in themes" v-bind:key='theme.idThemes'> {{ theme.Nom_theme }} </option>
         </select>
 
             <form @submit.prevent="createPost" aria-label="Nouveau message">
@@ -63,7 +63,7 @@
                 lastname: localStorage.getItem('lastname'),
                 isAdmin: localStorage.getItem('isAdmin'),
 
-
+                themeid: "",
                 posts: [],
                 themes: [],
                 post: '',
@@ -97,16 +97,17 @@
 
         methods: {
 
+
+             getvalue(event) {
+             this.themeId = event.target.value
+             },
+
             createPost() {
-               //console.log("creation")
+                console.log("creatpost")
 
-                let Artid = this.$route.query.id;
-
-
-
-                axios.post('http://localhost:3000/api/comments/',  {
-                content: this.content,
-                idArticle: Artid,
+                axios.post('http://localhost:3000/api/articles/',  {
+                title: this.content,
+                theme: this.themeId,
                 userId: this.userId,
 
                     headers: {
@@ -116,7 +117,9 @@
                     }
                 })
                 .then(() => {
-                    window.location.reload()
+
+                  this.$router.push( { path: 'Post'});
+
                 })
                 .catch(error => {
                     const msgerror = error.response.data;
@@ -130,7 +133,7 @@
 
                 .then(response => {
                     this.themes = response.data;
-                    console.log(this.themes)
+                    // console.log(this.themes)
 
                 })
                 .catch(error => {
@@ -139,27 +142,6 @@
                 })
             },
 
-
-            // Permet de créer un nouveau commentaire
-            createCom(id) {
-                const postId = id;
-
-                axios.post('http://localhost:3000/api/comment/' + postId, {
-                    content: this.contentComment,
-                },{
-                    headers: {
-                        'Authorization':
-                        localStorage.getItem('token')
-                    }
-                })
-                .then(() => {
-                    window.location.reload()
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
 
 
  // Permet d'afficher la date de publication au bon format

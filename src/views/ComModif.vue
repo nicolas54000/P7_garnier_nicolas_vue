@@ -180,7 +180,11 @@
                     }
                 })
                 .then(() => {
-                    window.location.reload()
+                    //window.location.reload()
+
+                    this.$router.push( { path: 'Post'});
+
+
                 })
                 .catch(error => {
                     const msgerror = error.response.data;
@@ -188,7 +192,7 @@
 
                 })
             },
- // Permet d'afficher la date de publication au bon format
+            // Permet d'afficher la date de publication au bon format
             dateFormat(date){
                 if (date) {
                     return moment(String(date)).format('DD/MM/YYYY')

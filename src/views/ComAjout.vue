@@ -2,7 +2,7 @@
     <div id="post">
         <Navbar/>
 
-       
+
 
        <div v-for="(post, index) in posts" :key="post.postId">
 
@@ -136,7 +136,8 @@
                     }
                 })
                 .then(() => {
-                    window.location.reload()
+                    //window.location.reload()
+                    this.$router.push( { path: 'Post'});
                 })
                 .catch(error => {
                     const msgerror = error.response.data;

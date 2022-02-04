@@ -4,22 +4,32 @@
 
 <div id="post">
 
-<div>
-        <table class="toto">
+<!--fenetre de gauche -->
+<div class="theme">
+      <table >
         <thead>
             <tr>
                 <th colspan="2">filtrer par theme</th>
             </tr>
         </thead>
 
-    <tbody>
+    <div>
         <tr v-for="theme in themes" v-bind:key="theme.idThemes">
             <td> {{ theme.Nom_theme }}</td>
             <td > <img class="foto" @click="themeselection(theme.idThemes)" :src="require(`@/assets/themes/${theme.Image}`)"></td>
         </tr>
-    </tbody>
+    </div>
     </table>
+
+    <div class="contenerliens">
+    <a  @click="displayPost();" class="liens">les derniers articles</a>
+    </div>
+
+    <div class="contenerliens">
+        <a  @click="newPost();" class="liens">nouvel article</a>
+    </div>
 </div>
+
 <div >
         <h1>les derniers articles</h1>
 
@@ -51,7 +61,9 @@
                             {{post.content}}
                         </h2>
                 </div>
-        <button @click="detail(post.idArticle)" type="button" >detail</button>
+        <div class="contenerliens">
+            <a  @click="detail(post.idArticle);" class="liens">les commentaires</a>
+        </div>
         </div>
 
     </div>
@@ -121,6 +133,11 @@ export default {
         this.$router.push( { path: 'Postdetail', query: { id: idArticle }});
     },
 
+    newPost() {
+
+        this.$router.push( { path: 'PostAjout'});
+    },
+
         displaythemes() {
                   axios.get('http://localhost:3000/api/themes', {
                 })
@@ -153,7 +170,7 @@ export default {
                     this.notyf.error(msgerror.error);
                 });
             },
-            
+
         // Permet d'afficher tous les messages
         displayPost() {
             axios.get("http://localhost:3000/api/articles/all/5", {
@@ -201,11 +218,32 @@ height:50px;
 text-align: start;
 }
 
-.toto
+.contenerliens
+{
+
+text-align: start;
+margin: 0px 15px 20px 0px;
+
+//border-radius: 25px;
+
+}
+
+.liens
+{
+color: black;
+text-align: start;
+//border-radius: 25px;
+
+}
+.liens:hover {
+ background-color: gold;
+}
+
+.theme
 {
 margin: 100px 15px 15px 50px;
-border: 2px solid #ff6363;
-border-radius: 25px;
+//border: 2px solid #ff6363;
+//border-radius: 25px;
 
 }
 
@@ -230,7 +268,7 @@ height:35px;
     &__item {
         display: flex;
         flex-direction: column;
-        border: 2px solid #ff6363;
+        border: 1px solid black;
         border-radius: 25px;
         margin: auto;
         margin-top: 2rem;
@@ -274,8 +312,9 @@ height:35px;
                     margin: 0.5rem 0.5rem 0 0;
                 }
                 &__name {
-                    margin-bottom: 0.2rem;
-                    font-size: 22px;
+                   text-align : left;
+                    font-size: 15px;
+                    padding: 2px 2px 5px 2px;
                     @media (max-width: 767px) {
                         font-size: 18px;
                     }
