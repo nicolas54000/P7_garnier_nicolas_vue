@@ -117,7 +117,7 @@
                     }
                 })
                 .then(() => {
-
+                   this.notyf.success('article a bien été ajouté')
                   this.$router.push( { path: 'Post'});
 
                 })

@@ -43,13 +43,13 @@
                 axios.delete('http://localhost:3000/api/users/' + userId, {
                     headers: {
                         'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        'Authorization': localStorage.getItem('token')
                     }
                 })
                 .then(() => {
                     this.notyf.success('Votre compte a bien été supprimé')
                     localStorage.clear();
-                 
+
                     this.$router.push('http://localhost:8080/');
                 })
                 .catch(error => {

@@ -20,9 +20,7 @@
                     <li class="nav-item">
                         <router-link to="/PostAjout" class="nav__links__link">Postjout</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link to="/ComAjout" class="nav__links__link">Cajout</router-link>
-                    </li>
+
 
                      <li class="nav-item">
                         <router-link to="/postdetail" class="nav__links__link">podetail</router-link>

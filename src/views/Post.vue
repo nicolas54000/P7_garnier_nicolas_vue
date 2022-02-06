@@ -9,7 +9,7 @@
       <table >
         <thead>
             <tr>
-                <th colspan="2">filtrer par theme</th>
+                <th class="titretheme" colspan="2">filtrer par theme</th>
             </tr>
         </thead>
 
@@ -62,7 +62,7 @@
                         </h2>
                 </div>
         <div class="contenerliens">
-            <a  @click="detail(post.idArticle);" class="liens">les commentaires</a>
+            <a  @click="detail(post.idArticle);" class="liens">voir les commentaires de l'article</a>
         </div>
         </div>
 
@@ -232,11 +232,18 @@ margin: 0px 15px 20px 0px;
 {
 color: black;
 text-align: start;
+// text-decoration: none;
 //border-radius: 25px;
 
 }
 .liens:hover {
  background-color: gold;
+
+}
+
+h1
+{
+ padding: 15px;
 }
 
 .theme
@@ -244,14 +251,17 @@ text-align: start;
 margin: 100px 15px 15px 50px;
 //border: 2px solid #ff6363;
 //border-radius: 25px;
+}
+.titretheme
+{
+padding: 20px 0px 20px 6px;
 
 }
 
-
 .foto
 {
-width:40px;
-height:35px;
+width:35px;
+height:28px;
 }
 .foto:hover {
 
@@ -279,8 +289,8 @@ height:35px;
         }
         &__image
         {
-        width: 60px;
-        height: 60px
+        width: 50px;
+        height: 40px
 
         }
 

@@ -137,7 +137,7 @@
                 })
                 .then(() => {
                     //window.location.reload()
-                    this.$router.push( { path: 'Post'});
+                    this.$router.push( { path: 'Postdetail', query: { id: Artid }});
                 })
                 .catch(error => {
                     const msgerror = error.response.data;
@@ -221,9 +221,7 @@
 
 
 <style scoped lang="scss">
-    .invisible {
-        display: none;
-    }
+
     .newPost {
         background: #ffb1b1;
         border-radius: 25px;
@@ -302,12 +300,15 @@
         &__item {
             display: flex;
             flex-direction: column;
-            border: 2px solid #ff6363;
+            border: 1px solid black;
             border-radius: 25px;
             margin: auto;
             margin-top: 2rem;
             padding: 1rem;
             width: 50%;
+            text-align: start;
+
+
             @media (max-width: 950px) {
                 width: 60%;
             }
@@ -330,7 +331,8 @@
             &__information {
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                //align-items: center;
+                text-align: start;
                 @media (max-width: 380px) {
                     display: flex;
                     flex-wrap: wrap;
@@ -342,10 +344,9 @@
                     }
                     &__name {
                         margin-bottom: 0.2rem;
-                        font-size: 22px;
-                        @media (max-width: 767px) {
-                            font-size: 18px;
-                        }
+                        font-size: 15px;
+                         padding: 2px 2px 5px 2px;
+
                     }
                 }
                 &__date {

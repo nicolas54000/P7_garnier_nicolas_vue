@@ -85,7 +85,7 @@
                 firstname: localStorage.getItem('firstname'),
                 lastname: localStorage.getItem('lastname'),
                 isAdmin: localStorage.getItem('isAdmin'),
-
+                saveidArticle: this.$route.query.id,
 
                 posts: [],
                 post: '',
@@ -181,6 +181,7 @@
                 })
                 .then(() => {
                     //window.location.reload()
+
 
                     this.$router.push( { path: 'Post'});
 
@@ -284,12 +285,13 @@
         &__item {
             display: flex;
             flex-direction: column;
-            border: 2px solid #ff6363;
+            border: 1px solid black;
             border-radius: 25px;
             margin: auto;
             margin-top: 2rem;
             padding: 1rem;
             width: 50%;
+            text-align: start;
             @media (max-width: 950px) {
                 width: 60%;
             }
@@ -324,10 +326,9 @@
                     }
                     &__name {
                         margin-bottom: 0.2rem;
-                        font-size: 22px;
-                        @media (max-width: 767px) {
-                            font-size: 18px;
-                        }
+                        font-size: 15px;
+                         padding: 2px 2px 20px 2px;
+
                     }
                 }
                 &__date {

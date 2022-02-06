@@ -17,10 +17,14 @@
                       <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
                             {{ post.Nom_theme }}
                     </div>
-                    <button @click="ComAjout" type="button" class="">
-                    <i class="far fa-images fa"></i> ajouter un poste </button>
+
                     <BR/>
                      <BR/>
+                            <a @click="ComAjout" type="button" class="liens">
+                            <i class="far fa-images fa"></i> ajouter un commentaire sur l 'article </a>
+                     <BR/>
+                       <BR/>
+
                   </div>
 
                     <div class="displayPost__item__information">
@@ -31,9 +35,16 @@
                                     </h2>
                     </div>
                     {{ post.content}}
+
+
+
                     </div>
 
+
+
                     <div class="displayPost__item__publication">
+
+
 
                 </div>
 
@@ -43,25 +54,21 @@
 
                    <Likes v-bind:post="post"/>
 
-                    <!--div>
-                        <i @click="displayComment(post.id)"
-                         v-on:click="diplayCreateComment(post.id)"
-                          class="far fa-comment-dots"
-                           aria-label="Commenter le message"></i>
 
-                    </div-->
 
                     <!--  modifier le poste  si admin et si cest l auteur du poste-->
 
                     <i v-if="userId == post.userId || isAdminw == 1 "
-                     @click="ModifyPost(post.commentId)"
+                     @click="ModifyCom(post.commentId)"
                      class="far fa-edit" aria-label="Modifier le message"></i>
 
                     <!--  supprimer le poste  si admin et si cest l auteur du poste-->
 
-                    <i v-if="userId ==  post.userId || isAdminw == 1 "
-                     v-on:click="deletePost(post.commentId)" class="far fa-trash-alt"
-                      aria-label="Supprimer le message"></i>
+                    <i v-if="(userId ==  post.userId || isAdminw == 1) & index != 0 "
+
+                     v-on:click="deleteCom(post.commentId)" class="far fa-trash-alt"
+                      aria-label="Supprimer le message">
+                     </i>
                 </div>
             </div>
 
@@ -118,7 +125,7 @@
         created()
 
         {
-            this.displayPost();
+            this.displayCom();
             this.notyf = new Notyf({
                 duration: 2000,
                 position: {
@@ -137,7 +144,7 @@
     },
 
             // Permet d'afficher tous les messages
-            displayPost() {
+            displayCom() {
 
             let idArticle = this.$route.query.id;
 
@@ -166,14 +173,16 @@
             },
 
             // Permet de modifier un message
-            ModifyPost(idArticle) {
-                this.$router.push( { path: 'ComModif' , query: { id: idArticle }});
+            ModifyCom(idCom) {
+                this.$router.push( { path: 'ComModif' , query: { id: idCom }});
 
             },
 
             // Permet de supprimer un message
-            deletePost(id) {
+            deleteCom(id) {
                 const postId = id;
+                //let idArticle = this.$route.query.id;
+
 
                 axios.delete('http://localhost:3000/api/comments/' + postId, {
                     headers: {
@@ -183,7 +192,8 @@
                     }
                 })
                 .then(() => {
-                    this.displayPost();
+                    this.displayCom();
+
                 })
                 .catch(error => {
                     const msgerror = error.response.data
@@ -199,6 +209,25 @@
     .invisible {
         display: none;
     }
+
+.liens
+{
+color: black;
+text-align: start;
+ text-decoration: none;
+
+//border-radius: 25px;
+
+}
+.liens:hover {
+ background-color: gold;
+ text-decoration: underline;
+}
+
+
+
+
+
     .newPost {
         background: #ffb1b1;
         border-radius: 25px;
@@ -277,12 +306,13 @@
         &__item {
             display: flex;
             flex-direction: column;
-            border: 2px solid #ff6363;
+            border: 1px solid black;
             border-radius: 25px;
             margin: auto;
             margin-top: 2rem;
             padding: 1rem;
             width: 50%;
+             text-align: left;
             @media (max-width: 950px) {
                 width: 60%;
             }
@@ -316,8 +346,9 @@
                     margin: 0.5rem 0.5rem 0 0;
                     }
                     &__name {
-                        margin-bottom: 0.2rem;
-                        font-size: 22px;
+                        text-align : left;
+                    font-size: 15px;
+                    padding: 2px 2px 5px 2px;
                         @media (max-width: 767px) {
                             font-size: 18px;
                         }
@@ -337,9 +368,9 @@
             &__publication {
                 display: flex;
                 flex-direction: column;
-                margin: 0.5rem 2rem;
+                margin: 1rem 0rem;
                 @media (max-width: 700px) {
-                    margin: 0.5rem;
+
                 }
                 &__text {
                     text-align: left;
