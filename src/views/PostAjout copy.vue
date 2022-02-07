@@ -1,49 +1,20 @@
 <template>
-    <div id="post">
+
         <Navbar/>
 
+<div id="themes" >
 
+     <div class="newPost">
 
-       <div v-for="(post, index) in posts" :key="post.postId">
+    <label >Choisir un theme:</label>
 
-            <div v-if= "index == 0">
-
-
-            <div class="displayPost__item">
-                <div>
-                    <!--on affiche le titre pour la 1er post -->
-
-                    <div class="displayPost__item__information">
-                      <img class="displayPost__item__image" :src="require(`@/assets/themes/${post.Image}`)">
-                            {{ post.Nom_theme }}
-
-                    </div>
-
-                    <BR/>
-                     <BR/>
-
-                    <div class="displayPost__item__information">
-                                    <h2 class="displayPost__item__information__user__name">
-                                        Publié le {{ dateFormat(post.dateOfModification) }}
-                                        par
-                                        {{ post.firstname }} {{ post.lastname }}
-                                    </h2>
-                    </div>
-                    {{ post.content}}
-
-                    </div>
-                </div>
-            </div>
-         </div>
-
-        <div class="newPost">
-
+        <select @change="getvalue($event)" >
+            <option  v-bind:value="theme.idThemes" v-for="theme in themes" v-bind:key='theme.idThemes'> {{ theme.Nom_theme }} </option>
+        </select>
 
             <form @submit.prevent="createPost" aria-label="Nouveau message">
                 <div class="newPost__content">
-                    <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Quoi de neuf ?" aria-label="Rédiger un nouveau message"/>
-
-
+                    <textarea v-model="content" class="newPost__content__text" name="message" id="message" placeholder="Saisie du poste?" aria-label="Rédiger un nouveau message"/>
                 </div>
 
                 <div class="newPost__option">
@@ -57,8 +28,13 @@
                 </div>
             </form>
         </div>
+
+
             <div>
         </div>
+
+
+
     </div>
 </template>
 
@@ -73,7 +49,7 @@
     import Navbar from '@/components/Navbar.vue'
 
     export default {
-        name: 'ComAjout',
+        name: 'PostAjout',
         components: {
             Navbar,
         },
@@ -85,8 +61,9 @@
                 lastname: localStorage.getItem('lastname'),
                 isAdmin: localStorage.getItem('isAdmin'),
 
-
+                themeid: "",
                 posts: [],
+                themes: [],
                 post: '',
                 imagePost: '',
                 imagePreview: null,
@@ -103,7 +80,8 @@
             }
         },
         created() {
-           this.displayPost();
+           this.displaythemes();
+
             this.notyf = new Notyf({
                 duration: 2000,
                 position: {
@@ -117,18 +95,21 @@
 
         methods: {
 
-            createPost() {
-               //console.log("creation")
 
-                let Artid = this.$route.query.id;
+             getvalue(event) {
+             this.themeId = event.target.value
+             },
+
+            createPost() {
+                 // console.log("creatpost", this.content)
 
                 if (this.content !== "" )
 
                 {
 
-                axios.post('http://localhost:3000/api/comments/',  {
-                content: this.content,
-                idArticle: Artid,
+                axios.post('http://localhost:3000/api/articles/',  {
+                title: this.content,
+                theme: this.themeId,
                 userId: this.userId,
 
                     headers: {
@@ -138,36 +119,29 @@
                     }
                 })
                 .then(() => {
-                    //window.location.reload()
-                    this.$router.push( { path: 'Postdetail', query: { id: Artid }});
+                  this.notyf.success('article bien ajouté')
+                  this.$router.push( { path: 'Post'});
+
                 })
                 .catch(error => {
                     const msgerror = error.response.data;
                     this.notyf.error(msgerror.error)
 
                 })
-
-                }
+                 }
                 else
                 {
                  this.notyf.success('vous devez saisir un texte')
 
                 }
-
-
             },
-
-// Permet d'afficher tous les messages
-            displayPost() {
-                let idArticle = this.$route.query.id;
-                axios.get('http://localhost:3000/api/comments/' + idArticle, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    }
+            displaythemes() {
+                  axios.get('http://localhost:3000/api/themes/', {
                 })
+
                 .then(response => {
-                    this.posts = response.data;
+                    this.themes = response.data;
+                    // console.log(this.themes)
 
                 })
                 .catch(error => {
@@ -177,48 +151,7 @@
             },
 
 
-            // Permet de créer un nouveau commentaire
-            createComment(id) {
-                const postId = id;
 
-                axios.post('http://localhost:3000/api/comment/' + postId, {
-                    content: this.contentComment,
-                },{
-                    headers: {
-                        'Authorization':
-                        localStorage.getItem('token')
-                    }
-                })
-                .then(() => {
-                    window.location.reload()
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
-
-            // Permet d'afficher les commentaires d'un message
-            displayComment(id) {
-              //  this.showComment = !this.showComment
-
-                const postId = id;
-
-                axios.get('http://localhost:3000/api/comment/' + postId, {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization':
-                        localStorage.getItem('token')
-                    }
-                })
-                .then(response => {
-                    this.comments = response.data;
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            },
  // Permet d'afficher la date de publication au bon format
             dateFormat(date){
                 if (date) {
@@ -232,7 +165,9 @@
 
 
 <style scoped lang="scss">
-
+    .invisible {
+        display: none;
+    }
     .newPost {
         background: #ffb1b1;
         border-radius: 25px;
@@ -285,7 +220,7 @@
                     border: none;
                     background-color: #ffb1b1;
                     &:hover, &:focus {
-                    color: white;
+                        color: white;
                     }
                 }
             }
@@ -299,7 +234,7 @@
                 margin: 1rem;
                 outline-style: none;
                 &:hover, &:focus {
-                color: #ff6363;
+                    color: #ff6363;
                 }
             }
 
@@ -311,15 +246,12 @@
         &__item {
             display: flex;
             flex-direction: column;
-            border: 1px solid black;
+            border: 2px solid #ff6363;
             border-radius: 25px;
             margin: auto;
             margin-top: 2rem;
             padding: 1rem;
             width: 50%;
-            text-align: start;
-
-
             @media (max-width: 950px) {
                 width: 60%;
             }
@@ -342,8 +274,7 @@
             &__information {
                 display: flex;
                 justify-content: space-between;
-                //align-items: center;
-                text-align: start;
+                align-items: center;
                 @media (max-width: 380px) {
                     display: flex;
                     flex-wrap: wrap;
@@ -355,9 +286,10 @@
                     }
                     &__name {
                         margin-bottom: 0.2rem;
-                        font-size: 15px;
-                         padding: 2px 2px 5px 2px;
-
+                        font-size: 22px;
+                        @media (max-width: 767px) {
+                            font-size: 18px;
+                        }
                     }
                 }
                 &__date {

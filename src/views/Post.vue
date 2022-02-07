@@ -15,8 +15,10 @@
 
     <div>
         <tr v-for="theme in themes" v-bind:key="theme.idThemes">
-            <td> {{ theme.Nom_theme }}</td>
-            <td > <img class="foto" @click="themeselection(theme.idThemes)" :src="require(`@/assets/themes/${theme.Image}`)"></td>
+            <td>
+            <a class="liens" @click="themeselection(theme.idThemes)"> {{ theme.Nom_theme }} </a>
+            </td>
+            <td> <img class="foto" @click="themeselection(theme.idThemes)" :src="require(`@/assets/themes/${theme.Image}`)"></td>
         </tr>
     </div>
     </table>
@@ -53,14 +55,9 @@
                 </div>
 
 
-                <div class="displayPost__item__information">
-
-                        <h2 class="displayPost__item__information__user__name">
-                        <br/>
-
-                            {{post.content}}
-                        </h2>
-                </div>
+                <div class="titrearticle">
+                     {{ post.title}}
+                 </div>
         <div class="contenerliens">
             <a  @click="detail(post.idArticle);" class="liens">voir les commentaires de l'article</a>
         </div>
@@ -203,6 +200,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../variables_SCSS/couleurs.scss";
 
 #post
 {
@@ -220,12 +218,8 @@ text-align: start;
 
 .contenerliens
 {
-
 text-align: start;
 margin: 0px 15px 20px 0px;
-
-//border-radius: 25px;
-
 }
 
 .liens
@@ -240,22 +234,27 @@ text-align: start;
  background-color: gold;
 
 }
+.titrearticle
+{
+ background-color: $fond;
+  text-align: center;
+ margin: 20px 0px 20px 10px;
+  font-size: 20px;
+}
 
 h1
 {
- padding: 15px;
+ padding: 20px;
 }
 
 .theme
 {
 margin: 100px 15px 15px 50px;
-//border: 2px solid #ff6363;
-//border-radius: 25px;
 }
+
 .titretheme
 {
 padding: 20px 0px 20px 6px;
-
 }
 
 .foto
@@ -264,8 +263,7 @@ width:35px;
 height:28px;
 }
 .foto:hover {
-
-	transform: scale(1.3);
+transform: scale(1.3);
 }
 
 .invisible {
@@ -346,12 +344,5 @@ height:28px;
 }
 
 
-@media (max-width: 767px) {
-    textarea {
-        font-size: 14px;
-    }
-    button {
-        font-size: 14px;
-    }
-}
+
 </style>

@@ -18,8 +18,9 @@
                             {{ post.Nom_theme }}
                     </div>
 
-                    <BR/>
-                     <BR/>
+                    <div class="titrearticle">
+                     {{ post.title}}
+                     </div>
                             <a @click="ComAjout" type="button" class="liens">
                             <i class="far fa-images fa"></i> ajouter un commentaire sur l 'article </a>
                      <BR/>
@@ -28,33 +29,21 @@
                   </div>
 
                     <div class="displayPost__item__information">
-                                    <h2 class="displayPost__item__information__user__name">
-                                        Publié le {{ dateFormat(post.dateOfCreation) }}
-                                        par
-                                        {{ post.firstname }} {{ post.lastname }}
-                                    </h2>
+                        <h2 class="displayPost__item__information__user__name">
+                                Publié le {{ dateFormat(post.dateOfCreation) }}
+                                par
+                                {{ post.firstname }} {{ post.lastname }}
+                        </h2>
                     </div>
                     {{ post.content}}
-
-
-
                     </div>
 
-
-
-                    <div class="displayPost__item__publication">
-
-
-
-                </div>
 
                 <div class="displayPost__item__option">
 
                 <!--  like un message-->
 
                    <Likes v-bind:post="post"/>
-
-
 
                     <!--  modifier le poste  si admin et si cest l auteur du poste-->
 
@@ -206,100 +195,29 @@
 
 
 <style scoped lang="scss">
-    .invisible {
-        display: none;
-    }
+@import "../variables_SCSS/couleurs.scss";
 
 .liens
 {
 color: black;
 text-align: start;
- text-decoration: none;
+text-decoration: underline;
 
 //border-radius: 25px;
-
 }
 .liens:hover {
  background-color: gold;
- text-decoration: underline;
+
 }
 
+.titrearticle
+{
+ background-color: $fond;
+  text-align: center;
+  margin: 20px 0px 20px 10px;
+  font-size: 20px;
+}
 
-
-
-
-    .newPost {
-        background: #ffb1b1;
-        border-radius: 25px;
-        margin: auto;
-        margin-top: 2rem;
-        padding: 1rem;
-        width: 50%;
-        @media (max-width: 950px) {
-            width: 60%;
-        }
-        @media (max-width: 768px) {
-            width: 70%;
-        }
-        @media (max-width: 550px) {
-            width: 80%;
-        }
-        @media (max-width: 450px) {
-            width: 90%;
-        }
-        &__photo__image {
-            width: 47px;
-        }
-        &__content__text {
-            border-radius: 0 15px;
-            border: none;
-            margin: 1.5rem 0 0 0;
-            max-width: 50rem;
-            width: 90%;
-            min-height: 5rem;
-        }
-        &__content__image {
-            max-width: 50rem;
-            width: 90%;
-            height: 274px;
-            margin: 1rem auto;
-            object-fit: cover;
-        }
-        &__option {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            &__file>input {
-                display: none;
-            }
-            &__file {
-                &__btnInvisible {
-                    display: flex;
-                    align-items: center;
-                    color: #3f3d56;
-                    border: none;
-                    background-color: #ffb1b1;
-                    &:hover, &:focus {
-                        color: white;
-                    }
-                }
-            }
-            &__button {
-                border: 2px solid #3f3d56;
-                border-radius: 25px;
-                color: #3f3d56;
-                font-size: 15px;
-                font-weight: bold;
-                padding: 0.4rem;
-                margin: 1rem;
-                outline-style: none;
-                &:hover, &:focus {
-                    color: #ff6363;
-                }
-            }
-
-        }
-    }
     .displayPost {
         display: flex;
         flex-direction: column;
@@ -399,17 +317,8 @@ text-align: start;
                             &__file>input {
                             display: none;
                             }
-                            &__file__btnInvisible {
-                                display: flex;
-                                align-items: center;
-                                font-size: 14px;
-                                color: #3f3d56;
-                                border: none;
-                                background-color: white;
-                                &:hover, &:focus {
-                                    color: #ff6363;
-                                }
-                            }
+
+
                             &__button {
                                 border: 2px solid #3f3d56;
                                 border-radius: 25px;
@@ -443,107 +352,6 @@ text-align: start;
         }
     }
 
-    .displayComment {
-        display: flex;
-        flex-direction: column;
-        &__item {
-            display: flex;
-            flex-direction: column;
-            border: 2px solid #ff6363;
-            border-radius: 25px;
-            margin: auto;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            width: 40%;
-            @media (max-width: 950px) {
-                width: 50%;
-            }
-            @media (max-width: 768px) {
-                width: 60%;
-            }
-            @media (max-width: 550px) {
-                width: 70%;
-            }
-            @media (max-width: 450px) {
-                width: 80%;
-            }
-            &__information {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                &__user {
-                    display: flex;
-                    align-items: center;
-                    &__photo {
-                    margin: 0 0.5rem 0 0;
-                    }
-                    &__name {
-                        margin-top: 0.5rem;
-                        margin-bottom: 0;
-                        font-size: 18px;
-                    }
-                }
-            }
-        }
-        &__newComment {
-            background: #ffb1b1;
-            border-radius: 25px;
-            margin: auto;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            width: 40%;
-            @media (max-width: 950px) {
-                width: 50%;
-            }
-            @media (max-width: 768px) {
-                width: 60%;
-            }
-            @media (max-width: 550px) {
-                width: 70%;
-            }
-            @media (max-width: 450px) {
-                width: 80%;
-            }
-            &__form {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                &__text {
-                    border-radius: 15px;
-                    border: none;
-                    margin: 0.5rem ;
-                    padding: 0.5rem;
-                    max-width: 50rem;
-                    width: 90%;
-                    min-height: 3rem;
-                }
-                &__button {
-                    border: 2px solid #3f3d56;
-                    border-radius: 25px;
-                    color: #3f3d56;
-                    font-size: 15px;
-                    font-weight: bold;
-                    padding: 0.4rem;
-                    margin: 1rem;
-                    outline-style: none;
-                    &:hover, &:focus {
-                        color: #ff6363;
-                        cursor: pointer;
-                    }
-                    @media (max-width: 450px) {
-                        margin: 0.5rem;
-                    }
 
-                }
-            }
-        }
-    }
-    @media (max-width: 767px) {
-        textarea {
-            font-size: 14px;
-        }
-        button {
-            font-size: 14px;
-        }
-    }
+
 </style>

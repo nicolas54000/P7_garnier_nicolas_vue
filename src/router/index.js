@@ -30,6 +30,15 @@ const routes = [
     }
   },
 
+  // {
+  //   path: '/post/:idCategory',
+  //   name: 'Post',
+  //   component: () => import('../views/Post.vue'),
+  //   meta: {
+  //     middleware: auth
+  //   }
+  // },
+
   {
     path: '/postTheme',
     name: 'PostTheme',
