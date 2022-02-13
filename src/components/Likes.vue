@@ -28,7 +28,7 @@
             }
         },
         mounted() {
-            this.displayHeartColor();  
+            this.displayHeartColor();
         },
         methods:{
             // Permet d'aimer un message
@@ -39,21 +39,21 @@
                 axios.get('http://localhost:3000/api/post/' + postId + '/like', {
                     headers: {
                         'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        'Authorization':  localStorage.getItem('token')
                     }
                 })
                 .then(response => {
                     this.postLikes = response.data;
-                    
+
                     if(this.postLikes.length == 0) {
-                        this.like = false  
+                        this.like = false
 
                         axios.post('http://localhost:3000/api/post/' + postId + '/like', {
                             like: this.like,
                         },{
                             headers: {
                                 'Content-Type' : 'application/json',
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                'Authorization': localStorage.getItem('token')
                             }
                         })
                         .then(() => {
@@ -64,16 +64,16 @@
                             const msgerror = error.response.data
                             this.notyf.error(msgerror.error)
                         })
-                    } else {                     
+                    } else {
                         if(this.postLikes.find(x => x.userId == userId)) {
-                            this.like = true   
-                            
+                            this.like = true
+
                             axios.post('http://localhost:3000/api/post/' + postId + '/like', {
                                 like: this.like,
                             },{
                                 headers: {
                                     'Content-Type' : 'application/json',
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                    'Authorization': localStorage.getItem('token')
                                 }
                             })
                             .then(() => {
@@ -85,14 +85,14 @@
                                 this.notyf.error(msgerror.error)
                             })
                         } else {
-                            this.like = false   
-                        
+                            this.like = false
+
                             axios.post('http://localhost:3000/api/post/' + postId + '/like', {
                                 like: this.like,
                             },{
                                 headers: {
                                     'Content-Type' : 'application/json',
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                    'Authorization':  localStorage.getItem('token')
                                 }
                             })
                             .then(() => {
@@ -120,16 +120,16 @@
                 axios.get('http://localhost:3000/api/post/' + postId + '/like', {
                     headers: {
                         'Content-Type' : 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        'Authorization': localStorage.getItem('token')
                     }
                 })
                 .then(response => {
                     this.postLikes = response.data;
-                                
+
                     if(this.postLikes.find(x => x.userId == userId)) {
-                        document.getElementById(this.post.id).classList = "fas fa-heart like__button postLiked"; 
-                    } else {  
-                        document.getElementById(this.post.id).classList = "far fa-heart like__button"; 
+                        document.getElementById(this.post.id).classList = "fas fa-heart like__button postLiked";
+                    } else {
+                        document.getElementById(this.post.id).classList = "far fa-heart like__button";
                     }
                 })
                 .catch(error => {

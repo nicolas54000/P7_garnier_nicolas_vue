@@ -30,6 +30,14 @@
     <div class="contenerliens">
         <a  @click="newPost();" class="liens">nouvel article</a>
     </div>
+
+    <div class="contenerliens">
+        <H2>  pagination </h2>
+        <input @click="debut()" type="button"    value="debut">
+        <input @click="plus()"  type="button"    value="+">
+        <input @click="moins()" type="button"    value="-">
+    </div>
+
 </div>
 
 <div >
@@ -63,7 +71,7 @@
         </div>
         </div>
 
-    </div>
+        </div>
      </div>
 
     </div>
@@ -108,8 +116,15 @@ export default {
             showComment: false,
             showCreateComment: false,
             showInputModify: false,
+            noligne: 0,
+            ligneparpage: 3,
+            nbrligne: 3,
+            savetheme: -1,
+
         };
     },
+
+
     created() {
         this.displayPost();
         this.displaythemes();
@@ -124,6 +139,45 @@ export default {
     },
 
     methods: {
+
+debut()
+{
+
+
+this.noligne = 0;
+
+console.log("debut", this.noligne, this.nbrligne, this.savetheme)
+this.display()
+},
+
+plus()
+{
+this.noligne =  this.noligne + this.ligneparpage;
+ this.display()
+},
+
+moins()
+{
+    this.noligne = this.noligne - this.ligneparpage;
+            if (this.noligne < 0)
+            {
+              this.noligne = 0;
+            }
+   this.display()
+},
+
+display()
+{
+if (this.savetheme == -1)
+            {
+              this.displayPost()
+            }
+            else
+            {
+              this. themeselection(this.savetheme)
+            }
+
+},
 
     detail(idArticle) {
 
@@ -150,9 +204,12 @@ export default {
             },
  // Permet d'afficher les articles par theme
         themeselection(themeId) {
-                 //  this.$router.push( { path: 'PostTheme', query: { id: themeId  }});
 
-        axios.get('http://localhost:3000/api/articles/theme/' + themeId, {
+                 this.idThemes = themeId,
+                 this.savetheme = themeId,
+
+         axios.get(`http://localhost:3000/api/articles/theme/${this.idThemes}/${this.noligne}/${this.nbrligne}`,
+                {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization:
@@ -169,14 +226,18 @@ export default {
             },
 
         // Permet d'afficher tous les messages
-        displayPost() {
-            axios.get("http://localhost:3000/api/articles/all/5", {
-                    headers: {
+        displayPost()
+        {
+           this.savetheme = -1,
+
+            console.log("nbr", this.nbrligne, "no lig", this.noligne)
+            axios.get(`http://localhost:3000/api/articles/all/${this.noligne}/${this.nbrligne}`,
+
+             {headers: {
                         "Content-Type": "application/json",
                         Authorization:
                         localStorage.getItem("token"),
-                    },
-                })
+                   }})
                 .then((response) => {
                     this.posts = response.data;
                     //window.location.reload()
@@ -219,7 +280,7 @@ text-align: start;
 .contenerliens
 {
 text-align: start;
-margin: 0px 15px 20px 0px;
+margin: 0px 15px 5px 0px;
 }
 
 .liens
@@ -238,13 +299,13 @@ text-align: start;
 {
  background-color: $fond;
   text-align: center;
- margin: 20px 0px 20px 10px;
-  font-size: 20px;
+ margin: 2px 0px 2px 10px;
+  font-size: 15px;
 }
 
 h1
 {
- padding: 20px;
+ padding: 10px;
 }
 
 .theme
@@ -287,8 +348,8 @@ transform: scale(1.3);
         }
         &__image
         {
-        width: 50px;
-        height: 40px
+        width: 30px;
+        height: 30px
 
         }
 
