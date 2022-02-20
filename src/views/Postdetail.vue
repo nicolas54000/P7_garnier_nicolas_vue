@@ -103,7 +103,7 @@
                 comments: [],
                 contentComment: '',
                 like: false,
-                postLikes: [],
+               // postLikes: [],
                 revele: false,
                 showComment: false,
                 showCreateComment: false,

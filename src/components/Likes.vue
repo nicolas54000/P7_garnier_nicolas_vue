@@ -16,27 +16,37 @@
         props:['post'],
         data(){
             return {
+                postLikes: [],
                 userId: localStorage.getItem('userId'),
-                notyf : new Notyf({
-                    duration: 2000,
-                    position: {
-                        x: 'center',
-                        y: 'top'
-                    },
-                    dismissible: true
-                })
+                dismissible: true
+
             }
         },
+
+        created() {
+
+			this.notyf = new Notyf({
+			duration: 2000,
+			position: {
+				x: 'center',
+				y: 'top'
+			}
+			});
+		},
+
         mounted() {
-            this.displayHeartColor();
+            //this.displayHeartColor();
         },
         methods:{
             // Permet d'aimer un message
             likePost() {
-                const postId = this.post.id;
-                const userId = this.userId;
+                this.postLikes =[]
+                console.log("*************  like *****" ,this.post.commentId, this.userId)
 
-                axios.get('http://localhost:3000/api/post/' + postId + '/like', {
+
+                axios.get(`http://localhost:3000/api/comments/like/lire/${this.userId}/${this.post.commentId}`, {
+
+
                     headers: {
                         'Content-Type' : 'application/json',
                         'Authorization':  localStorage.getItem('token')
@@ -44,12 +54,17 @@
                 })
                 .then(response => {
                     this.postLikes = response.data;
+                    console.log(this.postLikes[0])
 
-                    if(this.postLikes.length == 0) {
+                    if(!this.postLikes[0] ) {
                         this.like = false
 
-                        axios.post('http://localhost:3000/api/post/' + postId + '/like', {
-                            like: this.like,
+                        axios.post('http://localhost:3000/api/comments/like/ajout', {
+                           commentId: this.post.commentId,
+                           userId: this.userId,
+                           value: 1
+
+
                         },{
                             headers: {
                                 'Content-Type' : 'application/json',
@@ -57,86 +72,29 @@
                             }
                         })
                         .then(() => {
-                            console.log("Vous aimez ce message !");
-                            window.location.reload()
+                            //console.log("Vous aimez ce message !");
+                            this.notyf.success('Vous aimez ce message !')
+
+                           // window.location.reload()
                         })
                         .catch(error => {
                             const msgerror = error.response.data
                             this.notyf.error(msgerror.error)
                         })
                     } else {
-                        if(this.postLikes.find(x => x.userId == userId)) {
-                            this.like = true
+                        //alert("vous avez deja liker")
+                        this.notyf.success('vous avez deja liker ce commentaire')
 
-                            axios.post('http://localhost:3000/api/post/' + postId + '/like', {
-                                like: this.like,
-                            },{
-                                headers: {
-                                    'Content-Type' : 'application/json',
-                                    'Authorization': localStorage.getItem('token')
-                                }
-                            })
-                            .then(() => {
-                                console.log("Vous n'aimez plus ce message");
-                                window.location.reload()
-                            })
-                            .catch(error => {
-                                const msgerror = error.response.data
-                                this.notyf.error(msgerror.error)
-                            })
-                        } else {
-                            this.like = false
-
-                            axios.post('http://localhost:3000/api/post/' + postId + '/like', {
-                                like: this.like,
-                            },{
-                                headers: {
-                                    'Content-Type' : 'application/json',
-                                    'Authorization':  localStorage.getItem('token')
-                                }
-                            })
-                            .then(() => {
-                                console.log("Vous aimez ce message !");
-                                window.location.reload()
-                            })
-                            .catch(error => {
-                                const msgerror = error.response.data
-                                this.notyf.error(msgerror.error)
-                            })
-                        }
                     }
                 })
                 .catch(error => {
-                    const msgerror = error.response.data
+                   const msgerror = error.response.data
                     this.notyf.error(msgerror.error)
                 })
             },
 
             // Permet d'afficher un coeur vide ou plein en couleur en fonction de si l'utilisateur aime le message ou non
-            displayHeartColor(){
-                const postId = this.post.id;
-                const userId = localStorage.getItem('userId');
 
-                axios.get('http://localhost:3000/api/post/' + postId + '/like', {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Authorization': localStorage.getItem('token')
-                    }
-                })
-                .then(response => {
-                    this.postLikes = response.data;
-
-                    if(this.postLikes.find(x => x.userId == userId)) {
-                        document.getElementById(this.post.id).classList = "fas fa-heart like__button postLiked";
-                    } else {
-                        document.getElementById(this.post.id).classList = "far fa-heart like__button";
-                    }
-                })
-                .catch(error => {
-                    const msgerror = error.response.data
-                    this.notyf.error(msgerror.error)
-                })
-            }
         }
     }
 </script>

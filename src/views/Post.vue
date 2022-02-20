@@ -5,6 +5,7 @@
 <div id="post">
 
 <!--fenetre de gauche -->
+
 <div class="theme">
       <table >
         <thead>
@@ -25,14 +26,17 @@
 
     <div class="contenerliens">
     <a  @click="displayPost();" class="liens">les derniers articles</a>
+    <br><br>
+
     </div>
 
     <div class="contenerliens">
         <a  @click="newPost();" class="liens">nouvel article</a>
     </div>
 
+<p class="titretheme">pagination </p>
     <div class="contenerliens">
-        <H2>  pagination </h2>
+
         <input @click="debut()" type="button"    value="debut">
         <input @click="plus()"  type="button"    value="+">
         <input @click="moins()" type="button"    value="-">
@@ -138,15 +142,11 @@ export default {
         });
     },
 
-    methods: {
+methods: {
 
 debut()
 {
-
-
 this.noligne = 0;
-
-console.log("debut", this.noligne, this.nbrligne, this.savetheme)
 this.display()
 },
 
@@ -176,20 +176,19 @@ if (this.savetheme == -1)
             {
               this. themeselection(this.savetheme)
             }
-
 },
 
-    detail(idArticle) {
-
+detail(idArticle)
+    {
         this.$router.push( { path: 'Postdetail', query: { id: idArticle }});
     },
 
-    newPost() {
-
+    newPost()
+    {
         this.$router.push( { path: 'PostAjout'});
     },
 
-        displaythemes() {
+    displaythemes() {
                   axios.get('http://localhost:3000/api/themes', {
                 })
 
@@ -266,7 +265,6 @@ if (this.savetheme == -1)
 #post
 {
 display: flex,
-
 }
 
 
@@ -287,20 +285,17 @@ margin: 0px 15px 5px 0px;
 {
 color: black;
 text-align: start;
-// text-decoration: none;
-//border-radius: 25px;
-
 }
+
 .liens:hover {
  background-color: gold;
-
 }
 .titrearticle
 {
  background-color: $fond;
-  text-align: center;
+ text-align: center;
  margin: 2px 0px 2px 10px;
-  font-size: 15px;
+ font-size: 15px;
 }
 
 h1
@@ -315,7 +310,10 @@ margin: 100px 15px 15px 50px;
 
 .titretheme
 {
-padding: 20px 0px 20px 6px;
+padding: 10px 0px 20px 6px;
+font-size: 20px;
+font-weight: bold;
+
 }
 
 .foto

@@ -113,8 +113,6 @@
             });
         },
 
-
-
         methods: {
 
             createPost() {

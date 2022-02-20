@@ -103,7 +103,7 @@
 				})
 				.then(() => {
 					this.notyf.success('Votre profil a bien été modifié !')
-					this.displayProfile();
+					//this.displayProfile();
 				})
 				.catch(error => {
 					const msgerror = error.response.data

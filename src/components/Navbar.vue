@@ -17,15 +17,6 @@
                         <router-link to="/profile" class="nav__links__link">Mon profil</router-link>
                     </li>
 
-                     <!--li class="nav-item">
-                    /   <router-link to="/PostAjout" class="nav__links__link">Postjout</router-link>
-                    </li-->
-
-
-                    <!--li class="nav-item">
-                        <router-link to="/postdetail" class="nav__links__link">podetail</router-link>
-                    </li-->
-
 
 
                     <li class="nav-item">
