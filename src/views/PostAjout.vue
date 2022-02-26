@@ -114,7 +114,7 @@
                 commentaire: this.commentaire,
 
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
                         'Authorization':
                         localStorage.getItem('token')
                     }
